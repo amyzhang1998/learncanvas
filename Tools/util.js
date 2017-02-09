@@ -91,3 +91,25 @@ utils.parseColor = function(color, toNumber) {
         return color;
     }
 }
+
+utils.colorToRGB = function(color, alpha) {
+    //if string format , conver to number
+    if (typeof color === 'string' && color[0] === '#') {
+        color = window.parseInt(color.slice(1), 16);
+    }
+    alpha = (alpha === undefined) ? 1 : alpha;
+
+    //extract component values
+    var r = color >> 16 & 0xff,
+        g = color >> 8 & 0xff,
+        b = color & 0xff,
+        a = (alpha < 0) ? 0 : ((alpha > 1) ? 1 : alpha); //check range
+
+    // use 'rgba' if needed
+    if (a === 1) {
+        return "rgba(" + r + "," + g + "," + b + ")";
+    } else {
+        return "rgba(" + r + "," + g + "," + b + "," + a + ")";
+
+    };
+}

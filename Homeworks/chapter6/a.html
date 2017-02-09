@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html>
+
+
+<body>
+    <canvas id="myCanvas" width="200" height="200" style="border:2px solid blue;">
+您的浏览器不支持。
+</canvas>
+    <script src=" ../../Tools/ball.js"></script>
+    <script src=" ../../Tools/util.js"></script>
+    <script type="text/javascript">
+        var c = document.getElementById("myCanvas");
+        var cxt = c.getContext("2d");
+        var ball = new Ball(20);
+        ball.draw(cxt)
+        cxt.fillStyle = "#FF0000";
+        cxt.beginPath();
+        cxt.arc(100, 100, 30, 0, Math.PI * 2, true);
+        cxt.closePath();
+        cxt.fill();
+    </script>
+
+</body>
+
+</html>

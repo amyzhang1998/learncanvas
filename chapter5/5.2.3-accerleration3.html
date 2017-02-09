@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Acceleration2</title>
+    <link rel="stylesheet" href="../demo.css">
+    <script src=" ../Tools/ball.js"></script>
+    <script src=" ../Tools/util.js"></script>
+    <script>
+        window.onload = function() {
+            var canvas = document.getElementById('canvas');
+            context = canvas.getContext('2d'),
+                ball = new Ball(),
+                vx = 0,
+                ax = 0,
+                vy = 0,
+                ay = 0,
+                gravity = 0.02,
+                up = -0.025,
+                wind = 0.002;
+
+            ball.x = canvas.width / 2;
+            ball.y = canvas.height / 2;
+
+            window.addEventListener('keydown', function(event) {
+                switch (event.keyCode) {
+                    case 37: //left
+                        ax = -0.1;
+                        break;
+                    case 39: //right
+                        ax = 0.1;
+                        break;
+                    case 38: //up
+                        ay = -0.1;
+                        break;
+                    case 40: //down
+                        ay = 0.1;
+                        break;
+                }
+
+            }, false);
+
+            window.addEventListener('keyup', function() {
+                ax = 0;
+                ay = 0;
+            }, false)
+
+            (function drawFrame() {
+                window.requestAnimationFrame(drawFrame, canvas);
+                context.clearRect(0, 0, canvas.width, canvas.height);
+
+                vx += ax;
+                vx += wind;
+                vy += ay;
+                vy += gravity;
+                vy += up;
+
+                ball.x += vx;
+                ball.y += vy;
+                ball.draw(context);
+            }())
+
+        }
+    </script>
+</head>
+
+<body>
+    <canvas id="canvas" width="400" height="400"></canvas>
+</body>
+
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Muilti Curve</title>
+    <link rel="stylesheet" href="../../demo.css">
+    <script src='../../Tools/util.js'></script>
+    <script>
+        window.onload = function() {
+            var canvas = document.getElementById('canvas'),
+                context = canvas.getContext('2d'),
+                points = [],
+                numpoints = 5,
+                ctrlPoint = {};
+
+
+            var speed = 0.08,
+                angleX = 0,
+                speed2 = -0.05,
+                angleY = 0,
+                range = 200;
+
+
+            (function drawFrame() {
+                window.requestAnimationFrame(drawFrame, canvas);
+                context.clearRect(0, 0, canvas.width, canvas.height);
+
+                //array of random point objects
+                for (i = 0; i < numpoints; i++) {
+                    points.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height
+                    });
+                }
+                // move to the first points
+                context.save()
+                    // context.rotate(Math.cos(angleY) * Math.PI * 0.04)
+                    // context.translate(Math.sin(angleX) * range, Math.sin(angleY) * range)
+
+                context.beginPath();
+                context.moveTo(points[0].x, points[1].y + range * Math.sin(angleX));
+                //curve through the rest ,stopping at each midpoint
+                for (i = 0; i < numpoints - 2; i++) {
+                    ctrlPoint.x = (points[i].x + points[i + 1].x) / 2,
+                        ctrlPoint.y = (points[i].y + points[i + 1].y) / 2;
+                    context.quadraticCurveTo(points[i].x, points[i].y, ctrlPoint.x + range * Math.cos(angleY), ctrlPoint.y) + range * Math.cos(angleY);
+
+                }
+                angleX += speed;
+                angleY += speed2;
+
+                // curve through the last two points;
+                context.quadraticCurveTo(points[i].x, points[i].y + range * Math.sin(angleX), points[i + 1].x, points[i + 1].y + range * Math.sin(angleY));
+                context.stroke();
+                context.restore();
+
+            }())
+
+
+
+        };
+    </script>
+</head>
+
+<body>
+    <canvas id="canvas" width="800" height="800"></canvas>
+</body>
+
+</html>
+
+</html>

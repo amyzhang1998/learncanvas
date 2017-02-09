@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Muilti Curvesss</title>
+    <link rel="stylesheet" href="../demo.css">
+    <script src='../Tools/util.js'></script>
+    <script>
+        window.onload = function() {
+            var canvas = document.getElementById('canvas'),
+                context = canvas.getContext('2d'),
+                points = [],
+                numpoints = 5,
+                ctrlPoint = {};
+
+            //array of random point objects
+            for (var i = 0; i < numpoints; i++) {
+                points.push({
+                    x: Math.random() * canvas.width - 20,
+                    y: Math.random() * canvas.height + 20
+                });
+            }
+
+            // move to the first points
+            context.beginPath();
+            context.moveTo(points[0].x, points[1].y);
+            //curve through the rest ,stopping at each midpoint
+            for (i = 1; i < numpoints - 2; i++) {
+                ctrlPoint.x = (points[i].x + points[i + 1].x) / 2;
+                ctrlPoint.y = (points[i].y + points[i + 1].y) / 2;
+                context.quadraticCurveTo(points[i].x, points[i].y, ctrlPoint.x, ctrlPoint.y)
+            }
+
+            // curve through the last two points;
+            context.quadraticCurveTo(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y);
+            context.stroke();
+        };
+    </script>
+</head>
+
+<body>
+    <canvas id="canvas" width="400" height="400"></canvas>
+</body>
+
+</html>
+ml>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Removal</title>
+    <!-- <link rel="stylesheet" href="../../demo.css"> -->
+    <script src=" ../../Tools/ball.js"></script>
+    <script src=" ../../Tools/util.js"></script>
+    <style>
+        canvas {
+            background: #ffff;
+            background-image: linear-gradient(rgba(0, 0, 0, .3) 1px, transparent 0), linear-gradient(90deg, rgba(0, 0, 0, .3) 1px, transparent 0);
+            background-size: 10px 10px;
+            /*border: 1px solid red;*/
+            margin: 100px auto;
+            display: block;
+        }
+    </style>
+    <script>
+        window.onload = function() {
+            var canvas = document.getElementById('canvas'),
+                context = canvas.getContext('2d'),
+                balls = [],
+                numBalls = 5,
+                vx = 0;
+
+            for (var ball, i = 0; i < numBalls; i++) {
+                ball = new Ball(Math.random() * 20);
+                ball.x = Math.random() * canvas.width;
+                ball.y = Math.random() * canvas.height;
+                balls.push(ball);
+            }
+
+            window.addEventListener('mousedown', function() {
+                this.x = 5;
+            }, false);
+            window.addEventListener('mouseup', function() {
+                this.x = 0;
+            }, false);
+
+
+
+
+
+            (function drawFrame() {
+                window.requestAnimationFrame(drawFrame, canvas);
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                context.translate(this.x, 0)
+
+
+                balls.forEach(function(ball) {
+                    ball.draw(context)
+                })
+
+            }())
+            for (var i = 1; i <= 5; i++) {
+                function a() {
+                    console.log(i)
+                }
+                a()
+
+            }
+
+        }
+    </script>
+</head>
+
+<body>
+    <canvas id="canvas" width="400" height="400"></canvas>
+</body>
+
+</html>
