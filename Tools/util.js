@@ -10,6 +10,7 @@ if (!window.requestAnimationFrame) {
             return window.setTimeout(callback, 1000 / 60)
         })
 }
+//工具函数
 var utils = {};
 utils.captureMouse = function(element) {
     var mouse = {
@@ -93,23 +94,37 @@ utils.parseColor = function(color, toNumber) {
 }
 
 utils.colorToRGB = function(color, alpha) {
-    //if string format , conver to number
-    if (typeof color === 'string' && color[0] === '#') {
-        color = window.parseInt(color.slice(1), 16);
+        //if string format , conver to number
+        if (typeof color === 'string' && color[0] === '#') {
+            color = window.parseInt(color.slice(1), 16);
+        }
+        alpha = (alpha === undefined) ? 1 : alpha;
+
+        //extract component values
+        var r = color >> 16 & 0xff,
+            g = color >> 8 & 0xff,
+            b = color & 0xff,
+            a = (alpha < 0) ? 0 : ((alpha > 1) ? 1 : alpha); //check range
+
+        // use 'rgba' if needed
+        if (a === 1) {
+            return "rgba(" + r + "," + g + "," + b + ")";
+        } else {
+            return "rgba(" + r + "," + g + "," + b + "," + a + ")";
+
+        };
     }
-    alpha = (alpha === undefined) ? 1 : alpha;
-
-    //extract component values
-    var r = color >> 16 & 0xff,
-        g = color >> 8 & 0xff,
-        b = color & 0xff,
-        a = (alpha < 0) ? 0 : ((alpha > 1) ? 1 : alpha); //check range
-
-    // use 'rgba' if needed
-    if (a === 1) {
-        return "rgba(" + r + "," + g + "," + b + ")";
-    } else {
-        return "rgba(" + r + "," + g + "," + b + "," + a + ")";
-
-    };
+    //决定一个指定的坐标位置是否位于矩阵的边界内
+utils.containsPoint = function(rect, x, y) {
+    console.log(rect);
+    return !(
+        x < rect.x || x > rect.x + rect.width ||
+        y < rect.y || y > rect.y + rect.height
+    );
+}
+utils.containsCanvas = function(canvas, x, y) {
+    return !(
+        x < rect.x || x > rect.x + rect.width ||
+        y < rect.y || y > rect.y + rect.height
+    );
 }

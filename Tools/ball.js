@@ -32,4 +32,13 @@ Ball.prototype.draw = function(context) {
         context.stroke();
     }
     context.restore();
-}
+};
+//返回一个恰好能容纳小球的
+Ball.prototype.getBounds = function() {
+    return {
+        x: this.x - this.radius,
+        y: this.y - this.radius,
+        width: this.radius * 2,
+        height: this.radius * 2
+    };
+};

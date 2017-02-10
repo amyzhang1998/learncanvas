@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Mouse Move Drag</title>
+    <script src=" ../Tools/ball.js"></script>
+    <script src=" ../Tools/util.js"></script>
+    <style>
+        canvas {
+            background: #ffffff;
+            border: 1px solid red;
+        }
+    </style>
+    <script>
+        window.onload = function() {
+            var canvas = document.getElementById('canvas'),
+                context = canvas.getContext('2d'),
+                mouse = utils.captureMouse(canvas),
+                ball = new Ball(),
+                lx = 0,
+                ly = 0;
+
+            ball.x = canvas.width / 2;
+            ball.y = canvas.height / 2;
+
+            canvas.addEventListener('mousedown', function() {
+                if (utils.containsPoint(ball.getBounds(), mouse.x, mouse.y)) {
+                    lx = mouse.x - ball.x;
+                    ly = mouse.y - ball.y;
+
+                    canvas.addEventListener('mouseup', onMouseUp, false);
+                    canvas.addEventListener('mousemove', onMouseMove, false);
+                }
+            }, false);
+
+            function onMouseUp() {
+                canvas.removeEventListener('mouseup', onMouseUp, false);
+                canvas.removeEventListener('mousemove', onMouseMove, false)
+            }
+
+            function onMouseMove(event) {
+                ball.x = mouse.x - lx;
+                ball.y = mouse.y - ly;
+            }
+            (function drawFrame() {
+                window.requestAnimationFrame(drawFrame, canvas);
+                context.clearRect(0, 0, canvas.width, canvas.height);
+
+                ball.draw(context);
+            }())
+
+        }
+    </script>
+</head>
+
+<body>
+    <canvas id="canvas" width="400" height="400"></canvas>
+</body>
+
+</html>

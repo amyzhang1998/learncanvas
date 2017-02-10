@@ -6,63 +6,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Removal</title>
-    <!-- <link rel="stylesheet" href="../../demo.css"> -->
     <script src=" ../../Tools/ball.js"></script>
     <script src=" ../../Tools/util.js"></script>
+    <script src=" ./grids.js"></script>
+
     <style>
         canvas {
-            background: #ffff;
-            background-image: linear-gradient(rgba(0, 0, 0, .3) 1px, transparent 0), linear-gradient(90deg, rgba(0, 0, 0, .3) 1px, transparent 0);
-            background-size: 10px 10px;
-            /*border: 1px solid red;*/
-            margin: 100px auto;
-            display: block;
+            border: 1px solid red;
         }
     </style>
     <script>
         window.onload = function() {
             var canvas = document.getElementById('canvas'),
                 context = canvas.getContext('2d'),
+                mouse = utils.captureMouse(canvas),
+                grids = new Grids(context),
                 balls = [],
                 numBalls = 5,
-                vx = 0;
+                deltaX = 0,
+                deltaY = 0,
+                initX = 0,
+                initY = 0,
+                oldX = 0,
+                oldY = 0,
+                ball1 = new Ball(10);
 
             for (var ball, i = 0; i < numBalls; i++) {
                 ball = new Ball(Math.random() * 20);
-                ball.x = Math.random() * canvas.width;
-                ball.y = Math.random() * canvas.height;
+                ball.x = canvas.width / 2 + 20 * i;
+                ball.y = canvas.height / 2 + 20 * i;
                 balls.push(ball);
             }
+            ball1.x = 100;
+            ball1.y = 100;
 
-            window.addEventListener('mousedown', function() {
-                this.x = 5;
+
+            canvas.addEventListener('mousedown', function() {
+                oldX = mouse.x;
+                oldY = mouse.y;
+                canvas.addEventListener('mouseup', onMouseUp, false);
+                canvas.addEventListener('mousemove', onMouseMove, false);
             }, false);
-            window.addEventListener('mouseup', function() {
-                this.x = 0;
-            }, false);
 
+            function onMouseUp() {
 
+                deltaX = 0;
+                deltaY = 0;
+                canvas.removeEventListener('mouseup', onMouseUp, false);
+                canvas.removeEventListener('mousemove', onMouseMove, false)
+            }
 
+            function onMouseMove(event) {
+                deltaX = mouse.x - oldX;
+                deltaY = mouse.y - oldY;
+                ball1.x = ball1.x + (deltaX + initX) % 10;
+                ball1.y = ball1.y + (deltaY + initY) % 10;
+                balls.forEach(function(ball) {
+                    ball.x = ball.x + (deltaX + initX) % 10;
+                    ball.y = ball.y + (deltaY + initY) % 10;
+                })
 
-
+            }
             (function drawFrame() {
                 window.requestAnimationFrame(drawFrame, canvas);
                 context.clearRect(0, 0, canvas.width, canvas.height);
-                context.translate(this.x, 0)
-
-
                 balls.forEach(function(ball) {
+
                     ball.draw(context)
                 })
-
+                ball1.draw(context);
+                grids.draw(context, initX + deltaX, initY + deltaY);
             }())
-            for (var i = 1; i <= 5; i++) {
-                function a() {
-                    console.log(i)
-                }
-                a()
 
-            }
+
+
+
+
+
 
         }
     </script>
@@ -73,3 +93,4 @@
 </body>
 
 </html>
+>
