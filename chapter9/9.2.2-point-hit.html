@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Obejct Hit Test</title>
+    <style>
+        canvas {
+            border: 1px solid darkkhaki;
+        }
+    </style>
+</head>
+
+
+<body>
+    <canvas id='canvas' height='400' width='400'></canvas>
+    <textarea name="log" id="log" cols="30" rows="10"></textarea>
+    <script src='../Tools/util.js'></script>
+    <script src='../Tools/ball.js'></script>
+    <script>
+        window.onload = function () {
+            var canvas = document.getElementById('canvas'),
+                context = canvas.getContext('2d'),
+                log = document.getElementById('log'),
+                mouse = utils.captureMouse(canvas),
+                ball = new Ball();
+
+            ball.x = canvas.width / 2;
+            ball.y = canvas.height / 2;
+            ball.draw(context);
+
+            canvas.addEventListener('mousemove', function () {
+                if (utils.containsPoint(ball.getBounds(), mouse.x, mouse.y)) {
+                    log.value = "hit";
+                } else {
+                    log.value = 'no'
+                }
+            }, false)
+
+
+
+        }
+    </script>
+
+</body>
+
+</html>

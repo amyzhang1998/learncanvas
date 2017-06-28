@@ -6,18 +6,18 @@ if (!window.requestAnimationFrame) {
         window.mozRequestAnimationFrame ||
         window.oRequestAnimationFrame ||
         window.msRequestAnimationFrame ||
-        function(callback) {
+        function (callback) {
             return window.setTimeout(callback, 1000 / 60)
         })
 }
 //工具函数
 var utils = {};
-utils.captureMouse = function(element) {
+utils.captureMouse = function (element) {
     var mouse = {
         x: 0,
         y: 0
     };
-    element.addEventListener('mousemove', function(event) {
+    element.addEventListener('mousemove', function (event) {
         var x, y;
         if (event.pageX || event.pageY) {
             x = event.pageX;
@@ -36,24 +36,24 @@ utils.captureMouse = function(element) {
     }, false);
     return mouse;
 }
-utils.captureTouch = function(element) {
+utils.captureTouch = function (element) {
     var touch = {
         x: null,
         y: null,
         isPressed: false
     };
 
-    element.addEventListener('touchstart', function(event) {
+    element.addEventListener('touchstart', function (event) {
         touch.isPressed = true;
     }, false);
 
-    element.addEventListener('touchend', function(event) {
+    element.addEventListener('touchend', function (event) {
         touch.isPressed = false;
         touch.x = null;
         touch.y = null;
     }, false);
 
-    element.addEventListener('touchmove', function(event) {
+    element.addEventListener('touchmove', function (event) {
         var x, y,
             touch_event = event.touches[0]; //first touch
 
@@ -76,7 +76,7 @@ utils.captureTouch = function(element) {
 
     return touch;
 };
-utils.parseColor = function(color, toNumber) {
+utils.parseColor = function (color, toNumber) {
     if (toNumber === true) {
         if (typeof color === 'number') {
             return (color | 0);
@@ -93,38 +93,45 @@ utils.parseColor = function(color, toNumber) {
     }
 }
 
-utils.colorToRGB = function(color, alpha) {
-        //if string format , conver to number
-        if (typeof color === 'string' && color[0] === '#') {
-            color = window.parseInt(color.slice(1), 16);
-        }
-        alpha = (alpha === undefined) ? 1 : alpha;
-
-        //extract component values
-        var r = color >> 16 & 0xff,
-            g = color >> 8 & 0xff,
-            b = color & 0xff,
-            a = (alpha < 0) ? 0 : ((alpha > 1) ? 1 : alpha); //check range
-
-        // use 'rgba' if needed
-        if (a === 1) {
-            return "rgba(" + r + "," + g + "," + b + ")";
-        } else {
-            return "rgba(" + r + "," + g + "," + b + "," + a + ")";
-
-        };
+utils.colorToRGB = function (color, alpha) {
+    //if string format , conver to number
+    if (typeof color === 'string' && color[0] === '#') {
+        color = window.parseInt(color.slice(1), 16);
     }
-    //决定一个指定的坐标位置是否位于矩阵的边界内
-utils.containsPoint = function(rect, x, y) {
+    alpha = (alpha === undefined) ? 1 : alpha;
+
+    //extract component values
+    var r = color >> 16 & 0xff,
+        g = color >> 8 & 0xff,
+        b = color & 0xff,
+        a = (alpha < 0) ? 0 : ((alpha > 1) ? 1 : alpha); //check range
+
+    // use 'rgba' if needed
+    if (a === 1) {
+        return "rgba(" + r + "," + g + "," + b + ")";
+    } else {
+        return "rgba(" + r + "," + g + "," + b + "," + a + ")";
+
+    };
+}
+//决定一个指定的坐标位置是否位于矩阵的边界内
+utils.containsPoint = function (rect, x, y) {
     console.log(rect);
     return !(
         x < rect.x || x > rect.x + rect.width ||
         y < rect.y || y > rect.y + rect.height
     );
 }
-utils.containsCanvas = function(canvas, x, y) {
+utils.containsCanvas = function (canvas, x, y) {
     return !(
         x < rect.x || x > rect.x + rect.width ||
         y < rect.y || y > rect.y + rect.height
     );
+}
+//如果两个矩形对象相交，就返回true,否则返回false
+utils.intersects = function (rectA, rectB) {
+    return !(rectA.x + rectA.width < rectB.x ||
+        rectB.x + rectB.width < rectA.x ||
+        rectA.y + rectA.height < rectB.y ||
+        rectB.y + rectB.height < rectA.y);
 }

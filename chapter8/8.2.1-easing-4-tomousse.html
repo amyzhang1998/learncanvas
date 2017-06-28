@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Easing-4</title>
+    <style>
+        canvas {
+            border: 1px solid green;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id='canvas' width="400" height="400"></canvas>
+    <script src='../Tools/util.js'></script>
+    <script src='../Tools/ball.js'></script>
+    <script>
+        var canvas = document.getElementById('canvas'),
+            context = canvas.getContext('2d'),
+            mouse = utils.captureMouse(canvas),
+            red = 25, green = 0, blue = 0,
+            redTarget = 0, greenTarget = 0, blueTarget = 25,
+            easing = 0.05,
+            ball = new Ball();
+
+        (function drawFrame() {
+            window.requestAnimationFrame(drawFrame, canvas);
+            context.clearRect(0, 0, canvas.width, canvas.height);
+
+            // var ball = new Ball(40, color);
+            red += (redTarget - red) * easing;
+            green += (greenTarget - green) * easing;
+            blue += (blueTarget - blue) * easing;
+
+            var vx = (mouse.x - ball.x) * easing,
+                vy = (mouse.y - ball.y) * easing,
+                color = red << 16 | green << 8 | blue;
+
+
+            console.log(color)
+
+            ball.x += vx;
+            ball.y += vy;
+            ball.color += color;
+            ball.draw(context);
+        }())
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Spring-1</title>
+    <style>
+        canvas {
+            border: 1px solid green;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id='canvas' width="400" height="400"></canvas>
+    <script src='../Tools/util.js'></script>
+    <script src='../Tools/ball.js'></script>
+    <script>
+        // 弹动：加速度与距离成正比
+        var canvas = document.getElementById('canvas'),
+            context = canvas.getContext('2d'),
+            mouse = utils.captureMouse(canvas),
+
+            balls = [], numBalls = 5,
+
+            spring = 0.05,
+            friction = 0.9,
+            gravity = 2;
+
+        while (numBalls--) {
+            balls.push(new Ball(10));
+        }
+
+        function move(ball, targetX, targetY) {
+            ball.vx += (targetX - ball.x) * spring;
+            ball.vy += (targetY - ball.y) * spring;
+            ball.vy += gravity;
+            ball.vx *= friction;
+            ball.vy *= friction;
+            ball.x += ball.vx;
+            ball.y += ball.vy;
+        }
+        function draw(ballB, i) {
+            //if first ball,move to mouse
+            if (i == 0) {
+                move(ballB, mouse.x, mouse.y)
+            } else {
+                var ballA = balls[i - 1];
+                move(ballB, ballA.x, ballA.y);
+            }
+            context.lineTo(ballB.x, ballB.y);
+            context.stroke();
+            ballB.draw(context);
+
+        }
+
+
+        (function drawFrame() {
+            window.requestAnimationFrame(drawFrame, canvas);
+            context.clearRect(0, 0, canvas.width, canvas.height);
+
+            context.beginPath();
+            balls.forEach(draw);
+
+        }())
+    </script>
+</body>
+
+</html>

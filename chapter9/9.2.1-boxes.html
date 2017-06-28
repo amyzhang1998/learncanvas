@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Obejct Hit Test</title>
+    <style>
+        canvas {
+            border: 1px solid darkkhaki;
+        }
+    </style>
+</head>
+
+
+<body>
+    <canvas id='canvas' height='400' width='400'></canvas>
+    <textarea name="log" id="log" cols="30" rows="10"></textarea>
+    <script src='../Tools/util.js'></script>
+    <script src='../Tools/Box.js'></script>
+    <script>
+        window.onload = function () {
+            var canvas = document.getElementById('canvas'),
+                context = canvas.getContext('2d'),
+                boxes = [],
+                activeBox = createBox(),
+                gravity = 0.2;
+
+            function createBox() {
+                var box = new Box(Math.random() * 40 + 10, Math.random() * 40 + 10);
+                box.x = Math.random() * canvas.width;
+                boxes.push(box);
+                return box;
+            }
+            function drawBox(box) {
+                if (activeBox !== box && utils.intersects(activeBox, box)) {
+                    activeBox.y = box.y - activeBox.height;
+                    activeBox = createBox();
+                }
+                box.draw(context)
+            }
+
+
+            (function drawFrame() {
+                window.requestAnimationFrame(drawFrame, canvas);
+                context.clearRect(0, 0, canvas.width, canvas.height);
+
+                activeBox.vy += gravity;
+                activeBox.y += activeBox.vy;
+                if (activeBox.y + activeBox.height > canvas.height) {
+                    activeBox.y = canvas.height - activeBox.height;
+                    activeBox = createBox();
+                }
+                boxes.forEach(drawBox)
+            }())
+
+        }
+    </script>
+
+</body>
+
+</html>

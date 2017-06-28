@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Easing-2</title>
+    <style>
+        canvas {
+            border: 1px solid green;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id='canvas' width="400" height="400"></canvas>
+    <script src='../Tools/util.js'></script>
+    <script src='../Tools/ball.js'></script>
+    <script>
+        window.onload = function () {
+            var canvas = document.getElementById('canvas'),
+                context = canvas.getContext('2d'),
+                mouse = utils.captureMouse(canvas),
+                ball = new Ball(),
+                easing = 0.05,
+                targetX = canvas.width / 2,
+                targetY = canvas.height / 2,
+                isMouseDown = false;
+
+            canvas.addEventListener('mousedown', function () {
+                if (utils.containsPoint(ball.getBounds(), mouse.x, mouse.y)) {
+                    isMouseDown = true;
+                    canvas.addEventListener('mouseup', onMouseUp, false);
+                    canvas.addEventListener('mousemove', onMouseMove, false)
+                }
+            }, false);
+
+            function onMouseUp() {
+                isMouseDown = false;
+                canvas.removeEventListener('mouseup', onMouseUp, false);
+                canvas.removeEventListener('mousemove', onMouseMove, false);
+            }
+
+            function onMouseMove() {
+                ball.x = mouse.x;
+                ball.y = mouse.y;
+            }
+            //运动停止以后，这个函数还是会一直运行，要使用js让代码停止计算；
+            // 芝诺悖论（Zeno's Paradox）：每次移动物体到距离目标点的一半，
+            // 这样无穷循环下去，物体永远到达不了目标点
+            (function drawFrame() {
+                console.log(2)
+
+                window.requestAnimationFrame(drawFrame, canvas);
+                context.clearRect(0, 0, canvas.width, canvas.height);
+
+                if (!isMouseDown) {
+                    var vx = (targetX - ball.x) * easing,
+                        vy = (targetY - ball.y) * easing;
+
+                    ball.x += vx;
+                    ball.y += vy;
+                }
+
+                ball.draw(context);
+            }());
+
+
+        }
+    </script>
+</body>
+
+</html>

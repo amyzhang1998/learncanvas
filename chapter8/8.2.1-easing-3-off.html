@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Easing-1</title>
+    <style>
+        canvas {
+            border: 1px solid green;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id='canvas' width="400" height="400"></canvas>
+    <textarea name="log" id="log" cols="30" rows="10"></textarea>
+    <script src='../Tools/util.js'></script>
+    <script src='../Tools/ball.js'></script>
+    <script>
+        var canvas = document.getElementById('canvas'),
+            context = canvas.getContext('2d'),
+            log = document.getElementById('log'),
+            ball = new Ball(),
+            easing = 0.5,
+            targetX = canvas.width / 2,
+            animRequest;
+
+        ball.y = canvas.height / 2;
+
+
+        // animRequest:用来存放每一帧的播放请求；
+        // 如果浏览器没有原生支持window.cancelRequestAnimationFrame函数；
+        // 使用如下pollyfill
+        // if(!window.cancelRequestAnimationFrame){
+        //     window.cancelRequestAnimationFrame = (
+        //         window.cancelAnimationFrame||
+        //         window.webkitCancelRequestAnimationFrame||
+        //         window.mozCancelRequestAnimtionFrame||
+        //         window.oCancelRequestAnimationFrame||
+        //         window.msCancelRequestAnimationFrame ||
+        //         window.clearTimeout
+        //     );
+        // }
+        (function drawFrame() {
+            console.log(2)
+            animRequest = window.requestAnimationFrame(drawFrame, canvas);
+            context.clearRect(0, 0, canvas.width, canvas.height);
+
+            var dx = targetX - ball.x;
+
+            if (Math.abs(dx) < 1) {
+                ball.x = targetX;
+                window.cancelAnimationFrame(animRequest);
+                log.value = "Animation done!";
+            } else {
+                var vx = dx * easing;
+                ball.x += vx;
+            }
+            ball.draw(context);
+        }())
+    </script>
+</body>
+
+</html>

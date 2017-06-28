@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Spring-1</title>
+    <style>
+        canvas {
+            border: 1px solid green;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id='canvas' width="400" height="400"></canvas>
+    <script src='../Tools/util.js'></script>
+    <script src='../Tools/ball.js'></script>
+    <script>
+        // 弹动：加速度与距离成正比
+        var canvas = document.getElementById('canvas'),
+            context = canvas.getContext('2d'),
+            ball = new Ball(),
+            spring = 0.05,
+            friction = 0.95,
+            gravity = 2,
+            mouse = utils.captureMouse(canvas),
+            vx = 0,
+            vy = 0;
+
+        ball.y = canvas.height / 2;
+        (function drawFrame() {
+            window.requestAnimationFrame(drawFrame, canvas);
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            //画线
+            context.beginPath();
+            context.moveTo(ball.x, ball.y);
+            context.lineTo(mouse.x, mouse.y);
+            context.stroke();
+
+            var dx = mouse.x - ball.x,
+                dy = mouse.y - ball.y,
+                ax = dx * spring,
+                ay = dy * spring;
+
+            vx += ax;
+            vy += ay;
+
+            vy += gravity;//重力
+
+            vx *= friction;//摩擦力
+            vy *= friction;//摩擦力
+
+            ball.x += vx;
+            ball.y += vy;
+
+            ball.draw(context);
+        }())
+    </script>
+</body>
+
+</html>
