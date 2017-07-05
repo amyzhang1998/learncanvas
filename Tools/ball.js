@@ -10,13 +10,14 @@ function Ball(radius, color) {
     this.radius = radius;
     this.vx = 0;
     this.vy = 0;
+    this.mess = 1;
     this.rotation = 0;
     this.scaleX = 1;
     this.scaleY = 1;
     this.color = utils.parseColor(color);
     this.lineWidth = 1;
 }
-Ball.prototype.draw = function(context) {
+Ball.prototype.draw = function (context) {
     context.save();
     context.translate(this.x, this.y);
     context.rotate(this.rotation);
@@ -34,7 +35,7 @@ Ball.prototype.draw = function(context) {
     context.restore();
 };
 //返回一个恰好能容纳小球的
-Ball.prototype.getBounds = function() {
+Ball.prototype.getBounds = function () {
     return {
         x: this.x - this.radius,
         y: this.y - this.radius,
