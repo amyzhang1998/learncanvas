@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>drag multiple Segment</title>
+    <style>
+        canvas {
+            border: 1px solid red;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas" width="400" height="400"></canvas>
+    <script src="../Tools/util.js"></script>
+    <script src="../Tools/segment.js"></script>
+    <script src="../Tools/slider.js"></script>
+
+    <script>
+        window.onload = function () {
+            var canvas = document.getElementById('canvas'),
+                context = canvas.getContext('2d'),
+                segment0 = new Segment(100, 20),
+                segment1 = new Segment(100, 20),
+                mouse = utils.captureMouse(canvas),
+                segments = [],
+                numSegments = 50;
+
+            while (numSegments--) {
+                segments.push(new Segment(50, 10));
+            }
+
+
+            function drag(segment, xpos, ypos) {
+                var dx = xpos - segment.x,
+                    dy = ypos - segment.y;
+
+                segment.rotation = Math.atan2(dy, dx);
+
+                var w = segment.getPin().x - segment.x,
+                    h = segment.getPin().y - segment.y;
+
+                segment.x = xpos - w;
+                segment.y = ypos - h;
+
+            }
+
+            function move(segment, i) {
+                if (i !== 0) {
+                    drag(segment, segments[i - 1].x, segments[i - 1].y);
+                }
+            }
+
+            function draw(segment, i) {
+                segment.draw(context);
+            }
+
+            (function drawFrame() {
+                window.requestAnimationFrame(drawFrame, canvas);
+                context.clearRect(0, 0, canvas.width, canvas.height);
+
+                drag(segments[0], mouse.x, mouse.y);
+                segments.forEach(move);
+
+                segments.forEach(draw)
+            }());
+        }
+    </script>
+
+</body>
+
+</html>
