@@ -23,13 +23,15 @@
                 context = canvas.getContext('2d'),
                 mouse = utils.captureMouse(canvas),
                 balls = [],
-                numBalls = 15,
+                numBalls = 5,
                 fl = 250,
                 vpX = canvas.width / 2,
                 vpY = canvas.height / 2,
                 angleX, angleY;
             for (var ball, i = 0; i < numBalls; i++) {
                 ball = new Ball3d(5, "#000000");
+                // ball = new Ball3d(0);
+
                 ball.xpos = Math.random() * 200 - 100;
                 ball.ypos = Math.random() * 200 - 100;
                 ball.zpos = Math.random() * 200 - 100;

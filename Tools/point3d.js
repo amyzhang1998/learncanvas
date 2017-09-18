@@ -47,7 +47,7 @@ Point3d.prototype.rotateZ = function(angleZ) {
   this.x = x1;
   this.y = y1;
 };
-
+//通过透视图计算得到的坐标
 Point3d.prototype.getScreenX = function() {
   var scale = this.fl / (this.fl + this.z + this.cZ);
   return this.vpX + (this.cX + this.x) * scale;
