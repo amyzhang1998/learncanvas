@@ -108,7 +108,7 @@ utils.parseColor = function(color, toNumber) {
     if (typeof color === "string" && color[0] === "#") {
       color = color.slice(1);
     }
-    return window.parseColor(color, 16);
+    return window.parseInt(color, 16);
   } else {
     if (typeof color === "number") {
       color = "#" + ("00000" + (color | 0).toString()).substr(-6);

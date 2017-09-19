@@ -111,13 +111,17 @@
             function draw(triangle) {
                 triangle.draw(context);
             }
+            function depth(a, b) {
+                return (b.getDepth() - a.getDepth())
+            }
             (function drawFrame() {
                 window.requestAnimationFrame(drawFrame, canvas);
                 context.clearRect(0, 0, canvas.width, canvas.height);
 
-                angleX = (mouse.y - vpY) * 0.0005;
-                angleY = (mouse.x - vpX) * 0.0005;
+                angleX = (mouse.y - vpY) * 0.00005;
+                angleY = (mouse.x - vpX) * 0.00005;
                 points.forEach(move);
+                triangles.sort(depth);
                 triangles.forEach(draw);
             }());
         };

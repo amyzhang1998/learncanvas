@@ -4,10 +4,14 @@ function Triangle(a, b, c, color) {
   this.pointC = c;
   this.color = color === undefined ? "#ff0000" : utils.parseColor(color);
   this.lineWidth = 1;
-  this.alpha = 0.5;
+  this.alpha = 1;
+  this.light = null;
 }
 
 Triangle.prototype.draw = function(context) {
+  if (this.isBackface()) {
+    return;
+  }
   context.save();
   context.lineWidth = this.lineWidth;
   context.fillStyle = context.strokeStyle = utils.colorToRGB(
@@ -24,4 +28,14 @@ Triangle.prototype.draw = function(context) {
     context.stroke();
   }
   context.restore();
+};
+Triangle.prototype.isBackface = function() {
+  var cax = this.pointC.getScreenX() - this.pointA.getScreenX(),
+    cay = this.pointC.getScreenY() - this.pointA.getScreenY(),
+    bcx = this.pointB.getScreenX() - this.pointC.getScreenX(),
+    bcy = this.pointB.getScreenY() - this.pointC.getScreenY();
+  return cax * bcy > cay * bcx;
+};
+Triangle.prototype.getDepth = function() {
+  return Math.min(this.pointA.z, this.pointB.z, this.pointC.z);
 };
